@@ -24,6 +24,8 @@ print(dataTXT)
 dataCSV = readCSV("./water_potability.csv")
 print(dataCSV)
 
+df_meteo = pd.read_csv("./data_2020-04.csv")
+
 
 
 

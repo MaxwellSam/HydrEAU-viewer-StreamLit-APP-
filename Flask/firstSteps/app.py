@@ -31,3 +31,13 @@ def dataframe():
 # methods
 # myString = "this is a string"
 # txt(myString)
+
+@app.route("/API/ALLDATA")
+def all_data():
+    js = localData.df_meteo.to_json(orient="records")
+    js = json.dumps(js)
+    print(js)
+    return json.loads(js)
+
+app.run()
+    
