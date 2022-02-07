@@ -24,6 +24,13 @@ def index():
     """
     return json.loads(data.df_index.to_json(orient="index"))
 
+@apply.route("/REGION")
+def all_region():
+    data_json = {}
+    for region in data.list_region : 
+        data_json[region] = json.loads(data.df_index[region].to_json(orient="index"))
+    return json
+
 @apply.route("/REGION/<string:region_name>")
 def region(region_name):
     """
@@ -34,7 +41,8 @@ def region(region_name):
     else :
         df_region = data.filter_region(region_name, data.df)
         result = df_region.to_json(orient="index")
-        return json.loads(result)
+        # return json.loads(result)
+        return {region_name:json.loads(result)}
 
 
 if __name__ == "__main__":
