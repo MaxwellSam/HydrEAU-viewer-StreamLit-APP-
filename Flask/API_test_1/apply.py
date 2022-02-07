@@ -7,15 +7,7 @@ apply = Flask(__name__)
 
 @apply.route("/")
 def all_data():
-    # result = data.df.to_json(orient="columns")
-    # result = data.df.to_json(orient="split")
     result = data.df.to_json(orient="index")
-    # js = data.df.to_json(orient="records")
-    js = data.df.to_json(orient="split")
-    # return json.loads(json.dumps(js))
-    # return jsonify(json.loads(js))
-    # return json.loads(js)
-    # return json.loads(result)
     return json.loads(result)
 
 @apply.route("/groupby")
@@ -41,7 +33,7 @@ def region(region_name):
         return {'message':'bad request, '+region_name+' not in df'}, 400
     else :
         df_region = data.filter_region(region_name, data.df)
-        result = df_region.to_json(orient="split")
+        result = df_region.to_json(orient="index")
         return json.loads(result)
 
 
