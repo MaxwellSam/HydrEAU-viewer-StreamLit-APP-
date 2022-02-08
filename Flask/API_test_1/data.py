@@ -8,7 +8,7 @@ filePATH = "./data_2020-04.csv"
 # Methods 
 
 def filter_region(region_name, dataframe):
-    return df[df["region"]==region_name]
+    return dataframe[dataframe["region"]==region_name]
 
 # Dataframes 
 

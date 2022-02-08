@@ -26,10 +26,15 @@ def index():
 
 @apply.route("/REGION")
 def all_region():
+    """
+    clean datagramme by region and return a structured json by region
+    """
     data_json = {}
-    for region in data.list_region : 
-        data_json[region] = json.loads(data.df_index[region].to_json(orient="index"))
-    return json
+    for reg in data.list_region : 
+        data_reg = data.filter_region(reg, data.df)
+        json_reg = data_reg.set_index("day").to_json(orient="index")
+        data_json[reg]= json.loads(json_reg)
+    return data_json
 
 @apply.route("/REGION/<string:region_name>")
 def region(region_name):
@@ -40,7 +45,7 @@ def region(region_name):
         return {'message':'bad request, '+region_name+' not in df'}, 400
     else :
         df_region = data.filter_region(region_name, data.df)
-        result = df_region.to_json(orient="index")
+        result = df_region.set_index("day").to_json(orient="index")
         # return json.loads(result)
         return {region_name:json.loads(result)}
 
