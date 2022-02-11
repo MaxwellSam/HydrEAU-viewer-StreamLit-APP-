@@ -19,3 +19,4 @@ list_region = list(set(df["region"].values))
 df_groupby = df.groupby(["region", "day"]).mean()
 df_index = df.set_index(["region", "day"])
 
+df
