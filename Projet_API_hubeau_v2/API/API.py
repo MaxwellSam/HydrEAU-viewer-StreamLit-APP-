@@ -26,10 +26,9 @@ def origin():
 def hydro_stations():
     return tb.url_hubeau_to_json(var.url_hydro_stations)
 
-@API.route("/hydro/<string:request>")
+@API.route("/hydro/stations/<string:request>")
 def hydro_stations_request(request):
-    hydro_request_to_url(request)
-    return 
+    return tb.hydro_station_request_to_url(request)
     
 ## 
 
