@@ -9,6 +9,7 @@ from flask import abort
 import requests
 import pandas as pd 
 import json
+from datetime import date, timedelta
 
 import variables as var
 
@@ -49,3 +50,55 @@ def hydro_station_request_to_url(request):
         return hydro_station_request_coord_to_url(request_parsed["request_content"])
     else: 
         abort(400)
+
+
+def hydro_station_coord_to_url(args):
+    """
+    Description: get the arguments of request and generate the url for requesting hubEAU API
+    input: 
+        args: 
+            type: dict <str, str>
+            desc: contain request's arguments
+    output : 
+        url_hubeau: 
+            type: str
+            desc: the url created for requesting hubeau API 
+    """
+    url_hubeau = var.url_hydro_stations_filtre
+    for k in args.keys():
+        if k not in var.translate_key_word.keys():
+            abort(400)
+        url_hubeau += "&%s=%s"%(var.translate_key_word[k], args[k])
+    return url_hubeau
+
+## for hydro observations 
+
+def find_date_to_start(type, nbr):
+    today = date.today()
+    # str_date = today.strftime("%Y-%m-%d")
+    # n_days_ago = today - timedelta(days=5)
+    # print(today, n_days_ago) 
+    if type == "J":
+        day_to_start = today - timedelta(days=int(nbr))
+        return day_to_start
+    else:
+        abort(400)
+        
+    return 
+def hydro_obs_to_url(args):
+    # url_hubeau = var.url_hydro_obs+"?"
+    url_hubeau = var.url_hydro_obs_filtred
+    for k in args.keys():
+        if k in var.translate_timedate.keys():
+            # find date to start for x days of data (expl: J=5)
+            date_to_start = find_date_to_start(k, args[k])
+            # url_hubeau += "%s=%s&"%(var.translate_timedate[k], date_to_start)
+            url_hubeau += "&%s=%s"%(var.translate_timedate[k], date_to_start)
+        elif k not in var.translate_key_word.keys():
+            abort(400)
+        else:
+            # url_hubeau += "%s=%s&"%(var.translate_key_word[k], args[k])
+            url_hubeau += "&%s=%s"%(var.translate_key_word[k], args[k])
+    # return url_hubeau[:-1] # delete '&' end of str
+    return url_hubeau 
+
