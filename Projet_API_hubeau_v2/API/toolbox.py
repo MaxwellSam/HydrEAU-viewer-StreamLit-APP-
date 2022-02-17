@@ -74,17 +74,36 @@ def hydro_station_coord_to_url(args):
 ## for hydro observations 
 
 def find_date_to_start(type, nbr):
+    """
+    Description: Return the date before the curent date according to the type (D for days, M for months and Y for years) and the number (nbr)
+    input:
+        type: 
+            type: str
+            desc: interval of time 
+        nbr:
+            type: str
+            desc: number of intervals
+    output:
+        day_to_start:
+            type:str
+            desc: day which begin the data history
+    """
     today = date.today()
     # str_date = today.strftime("%Y-%m-%d")
     # n_days_ago = today - timedelta(days=5)
     # print(today, n_days_ago) 
-    if type == "J":
+    if type == "D":
         day_to_start = today - timedelta(days=int(nbr))
+        return day_to_start
+    if type == "M":
+        day_to_start = today - timedelta(days=int(nbr)*30)
+        return day_to_start
+    if type == "Y":
+        day_to_start = today - timedelta(days=int(nbr)*365)
         return day_to_start
     else:
         abort(400)
         
-    return 
 def hydro_obs_to_url(args):
     # url_hubeau = var.url_hydro_obs+"?"
     url_hubeau = var.url_hydro_obs_filtred

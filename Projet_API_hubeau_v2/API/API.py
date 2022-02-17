@@ -24,7 +24,7 @@ def origin():
  
 @API.route("/hydro/stations")
 def hydro_stations():
-    return tb.url_hubeau_to_json(var.url_hydro_stations)
+    return tb.url_hubeau_to_json(var.url_hydro_stations_filtre)
 
 @API.route("/hydro/stations/coord")
 def hydro_stations_coord():
@@ -49,7 +49,7 @@ def hydro_obs():
     """
     Description: Return hydro observation elaborate (daily average flow 'QmJ' or monthly average flow 'QmM') for the stations listed
     Exemple: /hydro/obs?hydro_type=QmJ&station=O965000101,O972001001&date_start_obs=2022-02-15
-             /hydro/obs?hydro_type=QmJ&station=O965000101,O972001001&J=5
+             /hydro/obs?hydro_type=QmJ&station=O965000101,O972001001&D=5
     args:
         hydro_type: the type of hydro obs ('QmJ' or 'QmM')
         station: stations selected (spaced by a comma)

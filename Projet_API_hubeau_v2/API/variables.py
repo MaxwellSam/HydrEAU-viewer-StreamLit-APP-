@@ -1,6 +1,6 @@
 """
 File: variables.py
-Description: contain variables
+Description: contain variables for API
 Author: Sam Maxwell
 Date: 02/2022
 """
@@ -34,7 +34,9 @@ translate_key_word = {
 }
 
 translate_timedate = {
-    "J":"date_debut_obs_elab"
+    "D":"date_debut_obs_elab",
+    "M":"date_debut_obs_elab",
+    "Y":"date_debut_obs_elab"
 }
 
 
