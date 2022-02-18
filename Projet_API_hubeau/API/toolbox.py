@@ -13,9 +13,15 @@ from datetime import date, timedelta
 
 import variables as var
 
+# def url_hubeau_to_json(url):
+#     response = requests.get(url, verify=False)
+#     return json.loads(response.text)
+
 def url_hubeau_to_json(url):
     response = requests.get(url, verify=False)
-    return json.loads(response.text)
+    file = json.loads(response.text)
+    data = file["data"]
+    return {i:data[i] for i in range(len(data))}
 
 
 """

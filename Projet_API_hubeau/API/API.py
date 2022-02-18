@@ -10,6 +10,7 @@ from flask import Flask, escape, request, template_rendered
 import pandas as pd
 import toolbox as tb
 import variables as var
+import json
 
 API = Flask(__name__)
 
@@ -62,6 +63,9 @@ def hydro_obs():
     if bool(request.args) == False:
         return tb.url_hubeau_to_json(var.url_hydro_obs)
     url = tb.hydro_obs_to_url(request.args)
+    # file = tb.url_hubeau_to_json(url)
+    # data = file["data"]
+    # return  {i:data[i] for i in range(len(data))}
     return tb.url_hubeau_to_json(url)
 
 
