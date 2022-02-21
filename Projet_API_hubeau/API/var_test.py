@@ -49,7 +49,7 @@ url_hydro_stations_filtre = url_hydro_stations+"&"+fields_filter_generator(stati
 
 ############################################ URL variables ###########################################
 
-url_hydro_obs = "https://hubeau.eaufrance.fr/api/v1/hydrometrie/obs_elab"
+url_hydro_obs_elab = "https://hubeau.eaufrance.fr/api/v1/hydrometrie/obs_elab"
 
 ## river temperature 
 url_river_temp_station = "https://hubeau.eaufrance.fr/api/v1/temperature/station?format=json"
@@ -57,7 +57,7 @@ url_river_temp_station = "https://hubeau.eaufrance.fr/api/v1/temperature/station
 # url_hydro_stations_filtre = "https://hubeau.eaufrance.fr/api/v1/hydrometrie/referentiel/stations?format=json"+"&%s"%(fields_station)
 
 fields_hydro_obs = "fields=code_station,date_obs_elab,date_prod,grandeur_hydro_elab,resultat_obs_elab"
-url_hydro_obs_filtred = url_hydro_obs+"?%s"%(fields_hydro_obs)
+url_hydro_obs_elab_filtred = url_hydro_obs_elab+"?%s"%(fields_hydro_obs)
 
 # conv_key_words_hubeau 
 ## note: dict to convert keyword from request to keyword for hubeau request

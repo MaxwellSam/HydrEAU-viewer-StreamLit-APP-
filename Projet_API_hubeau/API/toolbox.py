@@ -20,6 +20,7 @@ import variables as var
 def url_hubeau_to_json(url):
     response = requests.get(url, verify=False)
     file = json.loads(response.text)
+    # return url
     data = file["data"]
     return {i:data[i] for i in range(len(data))}
 
@@ -43,7 +44,10 @@ def parser_request(request):
         infos_request["request_content"][i[0]]=i[1].split(',')
     return infos_request
 
-## for stations data 
+#####################################################################################################
+#                                        STATIONS                                                   #
+#####################################################################################################
+ 
 
 def hydro_station_request_coord_to_url(request_content):
     # return {"it s ok":request_content}
@@ -77,7 +81,11 @@ def hydro_station_coord_to_url(args):
         url_hubeau += "&%s=%s"%(var.translate_key_word[k], args[k])
     return url_hubeau
 
-## for hydro observations 
+#####################################################################################################
+#                                        HYDRO OBS                                                  #
+#####################################################################################################
+
+################################### common usefull methods ##########################################
 
 def find_date_to_start(type, nbr):
     """
@@ -109,21 +117,92 @@ def find_date_to_start(type, nbr):
         return day_to_start
     else:
         abort(400)
-        
-def hydro_obs_to_url(args):
-    # url_hubeau = var.url_hydro_obs+"?"
-    url_hubeau = var.url_hydro_obs_filtred
+    
+def generate_url_hubEAU(url, translate_timedate, translate_key_word, args):
+    """
+    Description: generate the url for requestiong hubEAU from API request. 
+    It translate request's words and complete the url base.  
+    input:
+        url: 
+            type: str
+            desc: url base 
+        translate_timedate:
+            type: dict <str, str>
+            desc: dict to translate keywords for timedate.
+        translate_key_word:
+            type: dict <str, str>
+            desc: dict to translate keywords request.
+        args: 
+            type: dict <str, str>
+            desc: dict which contain request arguments.  
+    output:
+        url:
+            type:str
+            desc: url to request hubEAU
+    """
+    # return str(args)
     for k in args.keys():
-        if k in var.translate_timedate.keys():
-            # find date to start for x days of data (expl: J=5)
+        if k in translate_timedate.keys():
             date_to_start = find_date_to_start(k, args[k])
-            # url_hubeau += "%s=%s&"%(var.translate_timedate[k], date_to_start)
-            url_hubeau += "&%s=%s"%(var.translate_timedate[k], date_to_start)
-        elif k not in var.translate_key_word.keys():
+            url += "&%s=%s"%(translate_timedate[k], date_to_start)
+        elif k not in translate_key_word.keys():
             abort(400)
         else:
-            # url_hubeau += "%s=%s&"%(var.translate_key_word[k], args[k])
-            url_hubeau += "&%s=%s"%(var.translate_key_word[k], args[k])
-    # return url_hubeau[:-1] # delete '&' end of str
-    return url_hubeau 
+            url += "&%s=%s"%(translate_key_word[k], args[k])
+    return url 
 
+###################################### obs elab #######################################################
+
+def hydro_obs_elab_to_url(args):
+    url_hubeau = var.url_hydro_obs_elab_filtred
+    translate_timedate = var.translate_timedate_elab
+    translate_key_word = var.translate_key_word.copy()
+    translate_key_word.update(var.translate_key_word_elab)
+    # return str(translate_key_word)
+    return generate_url_hubEAU(url_hubeau, translate_timedate, translate_key_word, args)
+
+def hydro_obs_tr_to_url(args):
+    url_hubeau = var.url_hydro_obs_tr_filtred
+    translate_timedate = var.translate_timedate_tr
+    translate_key_word = var.translate_key_word.copy()
+    translate_key_word.update(var.translate_key_word_tr) 
+    return generate_url_hubEAU(url_hubeau, translate_timedate, translate_key_word, args)
+
+####################################### obs tr ########################################################
+
+def hydro_obs_to_url(request, args):
+    if request == "obs_elab":
+        return hydro_obs_elab_to_url(args)
+    return hydro_obs_tr_to_url(args)
+
+# def hydro_obs_to_url_elab(args):
+#     url_hubeau = var.url_hydro_obs_elab_filtred
+#     translate_timedate = var.translate_timedate_elab
+#     translate_key_word = var.translate_key_word.copy() 
+#     translate_key_word.update(var.translate_key_word_elab)
+#     # return str(translate_key_word)
+#     for k in args.keys():
+#         if k in translate_timedate.keys():
+#             date_to_start = find_date_to_start(k, args[k])
+#             url += "&%s=%s"%(translate_timedate[k], date_to_start)
+#         elif k not in translate_key_word.keys():
+#             abort(400)
+#         else:
+#             url += "&%s=%s"%(translate_key_word[k], args[k])
+#     return url 
+
+# def hydro_obs_to_url_tr(args):
+#     url_hubeau = var.url_hydro_obs_tr_filtred
+#     translate_timedate = var.translate_timedate_tr
+#     translate_key_word = var.translate_key_word.copy() 
+#     translate_key_word.update(var.translate_key_word_tr)
+#     # return str(translate_key_word)
+#     for k in args.keys():
+#         if k in translate_timedate.keys():
+#             date_to_start = find_date_to_start(k, args[k])
+#             url += "&%s=%s"%(translate_timedate[k], date_to_start)
+#         elif k not in translate_key_word.keys():
+#             abort(400)
+#         else:
+#             url += "&%s=%s"%(translate_key_word[k], args[k])
+#     return url 
