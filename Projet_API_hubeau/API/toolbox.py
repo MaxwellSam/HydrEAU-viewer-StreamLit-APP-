@@ -21,6 +21,7 @@ def url_hubeau_to_json(url):
     response = requests.get(url, verify=False)
     file = json.loads(response.text)
     # return url
+    # return file
     data = file["data"]
     return {i:data[i] for i in range(len(data))}
 
@@ -149,7 +150,7 @@ def generate_url_hubEAU(url, translate_timedate, translate_key_word, args):
             abort(400)
         else:
             url += "&%s=%s"%(translate_key_word[k], args[k])
-    return url 
+    return url + "&size=20000"
 
 ###################################### obs elab #######################################################
 

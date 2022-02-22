@@ -9,6 +9,10 @@ import variables as var
 import folium
 import streamlit as st
 import matplotlib.pyplot as plt 
+import matplotlib.dates as mdates
+import seaborn as sns
+import plotly.express as px
+import plotly.graph_objs as go
 
 # mapping
 
@@ -44,12 +48,40 @@ def creat_map(df, station_selected, stations_available, coord_center):
         #     ).add_to(my_map)
     return my_map
 
-def plot_data_station(dataframe, station):
-    df = dataframe[dataframe.libelle_station == station]
+# def plot_data_station(hydro_measure, dataframe, station):
+#     df = dataframe[dataframe.libelle_station == station]
+#     # date = df["date_obs"]
+#     # value = df[hydro_measure]
 
-    fig, ax = plt.subplots()
-    ax.set_xlabel("date")
-    ax.set_ylabel("Q")
-    df.plot(kind="line", x="date_obs_elab", y="resultat_obs_elab", ax=ax)
-    ax.grid(axis='x', color='0.80')
+#     fig, ax = plt.subplots()
+#     # ax.set_xlabel("date")
+#     # ax.set_ylabel("Q")
+#     df.plot(kind="line", x="date_obs", y=hydro_measure, ax=ax)
+#     ax.grid(axis='x', color='0.80')
+#     # plt.gcf().autofmt_xdate
+#     return fig
+
+def plot_data_station(hydro_measure, dataframe_selected, station_selected):
+    fig = plt.figure()
+    sns.lineplot(x="date_obs", y=hydro_measure, data=dataframe_selected)
+    plt.xticks(rotation=15)
+    return fig
+
+# def plot_data_station_plotly(hydro_measure, dataframe_selected, station_selected):
+#     df = dataframe_selected[dataframe_selected.libelle_station == station_selected]
+#     fig = px.line(
+#         df, 
+#         x="date_obs", 
+#         y=hydro_measure,
+#         hover_data={"date_obs": "|%B %d, %Y"})
+#     fig.update_xaxes(
+#         dtick="M1",
+#         tickformat="%b\n%Y")
+#     return fig
+
+def plot_data_station_plotly(hydro_measure, dataframe_selected, station_selected):
+    df = dataframe_selected[dataframe_selected.libelle_station == station_selected]
+    fig = go.Figure(go.Scatter(
+        x=df["date_obs"], 
+        y=df[hydro_measure]))
     return fig
