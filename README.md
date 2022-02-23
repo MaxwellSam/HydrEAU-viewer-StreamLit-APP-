@@ -48,14 +48,14 @@ The program use some python modules. Please assure you to have installed on your
 ## Running APP 
 
 To run the APP please follow the steps below
-
-### Windows 
-
+ 
 1) run the API
 
 The folder **./API** contain code about for the overlayer API.
   
-For using the developer mode, run the command `$env:FLASK_ENV = "development"`
+For using the developer mode, run the command:
+- Windows env: `$env:FLASK_ENV = "development"`
+- Mac/Linux env: `export FLASK_ENV = development`
 To run the API, use the command `python3 ./API/API.py`
 
 2) run the APP   
