@@ -17,66 +17,93 @@ import requests
 
 @st.cache
 def fetch_data(url):
+    """
+    Description: request the API with the url and return the response as text format 
+    input: 
+        url: 
+            type: str
+            desc: url for requestinf API
+    output : 
+        resp.text: 
+            type: str
+            desc: data json as text format returned by the API  
+    """
     resp = requests.get(url)
     return resp.text
-    # data_json = json.loads(resp.text)
-    # return pd.DataFrame(data_json["data"])
-    # return pd.DataFrame.from_dict(data_json)
 
 def load_data_stations(long, lat, dist):
+    """
+    Description: load data stations from the API around the specified distance (dist) from the specified coordinate (long, lat).
+    input: 
+        long: 
+            type: float
+            desc: longitude
+        lat:
+            type: float
+            desc: latitude
+        dist:
+            type: int
+            desc: distance (in km) around the coordinates
+    output :  
+            type: dataframe
+            desc: dataframe which contain stations info at dist around [long, lat]  
+    """
     if long == 0 or lat == 0 or dist == 0:
         tmp = fetch_data(var.url_hydro_stations)
     else:
         tmp = fetch_data(var.generate_url_coord(long, lat, dist))
-    # data_json = json.loads(tmp)
-    # return pd.DataFrame(data_json["data"])
-    # return pd.DataFrame(data_json)
-    tmp = json.loads(tmp)
-    return pd.DataFrame.from_dict(tmp, orient='index')
-    # return pd.read_json(tmp, orient ='index')
-
-# def load_data_stations(long, lat, dist):
-#     if long == 0 or lat == 0 or dist == 0:
-#         return generate_dataframe(var.url_hydro_stations)
-#     else:
-#         return generate_dataframe(var.generate_url_coord(long, lat, dist))
-
+    data_json = json.loads(tmp)
+    return pd.DataFrame.from_dict(data_json, orient='index')
 
 #####################################################################################################
 #                                        HYDRO OBS                                                  #
 #####################################################################################################
 
-def load_data_hydro_obs_elab(long, lat, dist, days_before):
-    df_stations = load_data_stations(long, lat, dist)
-    stations = df_stations.code_station.tolist()
+############# 
+# Hydro Obs #
+#############
+
+def load_data_hydro_obs_elab(stations, days_before):
+    """
+    Description: load the data hydro elaborate (daily flow "QmJ") with a specified data history (days_before)  
+    input: 
+        stations: 
+            type: dataframe 
+            desc: contain info about stations
+        days_before:
+            type: int
+            desc: number of days before the curent date
+    output : 
+        df: 
+            type: dataframe
+            desc: contain hydro data of stations specified 
+    """
     url = var.generate_url_hydro_obs_elab(stations, days_before)
-    # tmp = fetch_data(var.generate_url_hydro_obs(stations, days_before))
     tmp = fetch_data(url)
-    # return pd.read_json(tmp, orient="index")
     json_data = json.loads(tmp)
     df = pd.DataFrame.from_dict(json_data, orient='index')
     df = df.rename(columns={"date_obs_elab":"date_obs", "resultat_obs_elab":"QmJ"})
     return df
-# def load_data_hydro_obs_tr(long, lat, dist, days_before):
-#     df_stations = load_data_stations(long, lat, dist)
-#     stations = df_stations.code_station.tolist()
-#     url = var.generate_url_hydro_obs_tr(stations, days_before)
-#     tmp = fetch_data(url)
-#     tmp = json.loads(tmp)
-#     # return tmp
-#     df = pd.DataFrame.from_dict(tmp, orient='index')
-#     # return df
-#     # df = pd.read_json(tmp, orient="index")
-#     # return df 
-#     df_Q = df[df["grandeur_hydro"] == "Q"].loc[:, df.columns!="grandeur_hydro"]
-#     df_Q = df_Q.rename(columns={'resultat_obs':'Q'}, inplace=True)
 
-#     df_H = df[df["grandeur_hydro"] == "H"].loc[:, df.columns!="grandeur_hydro"]
-#     df_H = df_H.rename(columns={'resultat_obs':'H'}, inplace=True)
-#     # df_Q = df[df["grandeur_hydro"] == "H"].rename(columns={"resultat_obs":"H"}).pop("grandeur_hydro")
-#     return pd.merge(df_H, df_Q)
+################ 
+# Hydro Obs tr #
+################
 
 def creat_df_tr_from_url(url, hydro_mesure):
+    """
+    Description: creat dataframe of "real time" data according to the hydro measure (distinction between "H" and "Q")
+    input: 
+        url: 
+            type: str
+            desc: url base for requesting API (just have to specified the hydro measure)
+        hydro_measure:
+            type: str
+            desc: type of hydro measure ("H" or "Q")
+    output : 
+        df: 
+            type: dataframe
+            desc: contain data hydro "real time" of stations for the hydro measure specified  
+    """
     tmp = fetch_data(url)
     json_data = json.loads(tmp)
     df = pd.DataFrame.from_dict(json_data, orient="index")
@@ -89,10 +116,10 @@ def creat_df_tr_from_url(url, hydro_mesure):
     return df
 
 
-def load_data_hydro_obs_tr(long, lat, dist, days_before):
+def load_data_hydro_obs_tr(stations, days_before):
     ## stations ##
-    df_stations = load_data_stations(long, lat, dist)
-    stations = df_stations.code_station.tolist()
+    # df_stations = load_data_stations(long, lat, dist)
+    # stations = df_stations.code_station.tolist()
     ## data hydro tr ##
     url_H = var.generate_url_hydro_obs_tr_H(stations, days_before)
     url_Q = var.generate_url_hydro_obs_tr_Q(stations, days_before)
@@ -100,18 +127,111 @@ def load_data_hydro_obs_tr(long, lat, dist, days_before):
     df_Q = creat_df_tr_from_url(url_Q, 'Q')
     return pd.merge(df_H, df_Q, how='outer')
 
-def load_data_hydro_obs_tr_H(long, lat, dist, days_before):
+def load_data_hydro_obs_tr_H(stations, days_before):
+    """
+    Description: load data water tide ("H") in "real time" for the specified stations and with the specific history of days 
+    input: 
+        stations: 
+            type: dataframe 
+            desc: contain info of stations
+        days_before:
+            type: int
+            desc: number of days before the curent date
+    output : 
+            type: dataframe
+            desc: contain info of water tide reccorded by the stations since days_before 
+    """
     ## stations ##
-    df_stations = load_data_stations(long, lat, dist)
-    stations = df_stations.code_station.tolist()
+    # df_stations = load_data_stations(long, lat, dist)
+    # stations = df_stations.code_station.tolist()
     ## data hydro tr ##
     url_H = var.generate_url_hydro_obs_tr_H(stations, days_before)
     return creat_df_tr_from_url(url_H, 'H')
 
-def load_data_hydro_obs_tr_Q(long, lat, dist, days_before):
+def load_data_hydro_obs_tr_Q(stations, days_before):
+    """
+    Description: load data water flow ("Q") in "real time" for the specified stations and with the specific history of days 
+    input: 
+        stations: 
+            type: dataframe 
+            desc: contain info of stations
+        days_before:
+            type: int
+            desc: number of days before the curent date
+    output : 
+            type: dataframe
+            desc: contain info of water flow reccorded by the stations since days_before 
+    """
     ## stations ##
-    df_stations = load_data_stations(long, lat, dist)
-    stations = df_stations.code_station.tolist()
+    # df_stations = load_data_stations(long, lat, dist)
+    # stations = df_stations.code_station.tolist()
     ## data hydro tr ##
     url_Q = var.generate_url_hydro_obs_tr_Q(stations, days_before)
     return creat_df_tr_from_url(url_Q, 'Q')
+
+############################ 
+# check stations with data #
+############################
+
+def get_stations_with_data(hydro_measure, stations):
+    """
+    Description: filter stations dataframe to return only stations which have data of hydro measure ("Q", "H" or "QmJ") 
+    input: 
+        hydro_measure:
+            type: str
+            desc: type of hydro measure ("H", "Q" or "QmJ")
+        stations: 
+            type: dataframe 
+            desc: contain info about stations
+    output : 
+            type: dataframe
+            desc: contain info of water tide reccorded by the stations since days_before 
+    """
+    codes_stations = stations.code_station.tolist()
+    if hydro_measure == "Q":
+        df = load_data_hydro_obs_tr_Q(codes_stations, 1)
+    elif hydro_measure == "H":
+        df = load_data_hydro_obs_tr_H(codes_stations, 1)
+    elif hydro_measure == "QmJ":
+        df = load_data_hydro_obs_elab(codes_stations, 1)
+    else: 
+        return None
+    return stations[stations.code_station.isin(df.code_station)]
+
+################################### 
+# Generate Dataframe Hydro (auto) #
+###################################
+
+def get_data_hydro_station(station_selected, hydro_measure, stations, days_before):
+    """
+    Description: get dataframe of a stecific station for a specific hydro measure ("Q", "H" or "QmJ") with a data history (days_before) 
+    input: 
+        station_selected:
+            type: str
+            desc: libelle of the selected station
+        hydro_measure:
+            type: str
+            desc: type of hydro measure ("H", "Q" or "QmJ")
+        stations: 
+            type: dataframe 
+            desc: contain info about stations
+        days_before:
+            type: int
+            desc: number of days before the curent date
+    output : 
+        df:
+            type: dataframe
+            desc: contain data hydro ("Q", "H" or "QmJ") reccorded by the station since the number of days "days_before" 
+    """
+    code_station = stations[stations.libelle_station == station_selected].code_station.tolist()
+    if hydro_measure == "Q":
+        df = load_data_hydro_obs_tr_Q(code_station, days_before)
+    elif hydro_measure == "H":
+        df = load_data_hydro_obs_tr_H(code_station, days_before)
+    elif hydro_measure == "QmJ":
+        df = load_data_hydro_obs_elab(code_station, days_before)
+    else: 
+        return None
+    return df
+
+
