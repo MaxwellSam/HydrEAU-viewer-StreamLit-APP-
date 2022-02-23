@@ -8,7 +8,7 @@ This tool allow to visualize three parameters, water tide, flow and daily flow r
 
 ![view Web APP](img/Screenshot%202022-02-23%20at%2017.26.27.png)
 
-## Python Dependancy
+## Python Dependancies
 
 The program use some python modules. Please assure you to have installed on your python environnment the following modules :
 - Data storage and manipulation 
