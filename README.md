@@ -28,6 +28,7 @@ The program use some python modules. Please assure you to have installed on your
 
 ## Project Architecture
 
+```
 ./
   | _ _ API/
   |         | _ API.py
@@ -42,6 +43,7 @@ The program use some python modules. Please assure you to have installed on your
   |
   | _ README.md
   | _ img/
+```
 
 ## Running APP 
 
