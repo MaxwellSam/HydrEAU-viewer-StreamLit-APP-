@@ -67,7 +67,7 @@ df_stations = data.load_data_stations(long,lat,dist)
 # st.dataframe(df1_stations)
 ## Data hydro
 
-st.write(var.generate_url_hydro_obs_tr_H(df_stations.columns.tolist(), days_before))
+# st.write(var.generate_url_hydro_obs_tr_H(df_stations.columns.tolist(), days_before))
 
 df_data_obs_elab = data.load_data_hydro_obs_elab(long, lat, dist, days_before)
 # st.dataframe(df2_data_obs_elab)
@@ -119,10 +119,10 @@ for df in list_df:
 
 # folium_static(my_map)
 
-multi_select_stations = st.multiselect(
-    "multi selection station (test)",
-    stations_with_data.libelle_station
-)
+# multi_select_stations = st.multiselect(
+#     "multi selection station (test)",
+#     stations_with_data.libelle_station
+# )
 station_selected = st.selectbox(
     "Select station",
     # df3_stations_with_data.code_station.tolist()
