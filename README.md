@@ -56,6 +56,7 @@ The folder **./API** contain code about for the overlayer API.
 For using the developer mode, run the command:
 - Windows env: `$env:FLASK_ENV = "development"`
 - Mac/Linux env: `export FLASK_ENV = development`
+
 To run the API, use the command `python3 ./API/API.py`
 
 2) run the APP   
