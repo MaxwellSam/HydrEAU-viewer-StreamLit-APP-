@@ -63,7 +63,8 @@ To run the API, use the command `python3 ./API/API.py`
 
 To run the APP, use the command `python3 -m streamlit run ./Interface/app.py` 
 
-### or use run.sh 
+### Or use run.sh 
 
-execute on the command in a shell bash `sh run.sh`
+Execute on the command in a shell bash `sh run.sh`
+
 *<u>note:</u> to run python script this file use the variable ***python3***, or if this one is not found it will try with the varibale ***python***. Then, be sure you have this variables in your env and they are pointing on the right python version.*  
