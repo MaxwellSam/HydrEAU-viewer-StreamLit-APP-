@@ -6,7 +6,7 @@ Date: 02/2022
 """
 
 import streamlit as st
-import variables as var
+import Interface.variables as var
 import pandas as pd
 import json 
 import requests
@@ -29,6 +29,10 @@ def fetch_data(url):
             desc: data json as text format returned by the API  
     """
     resp = requests.get(url)
+    print("#####\n")
+    print(url)
+    print(resp)
+    print("\n#####")
     return resp.text
 
 def load_data_stations(long, lat, dist):
@@ -50,6 +54,7 @@ def load_data_stations(long, lat, dist):
     """
     if long == 0 or lat == 0 or dist == 0:
         tmp = fetch_data(var.url_hydro_stations)
+        print(var.url_hydro_stations)
     else:
         tmp = fetch_data(var.generate_url_coord(long, lat, dist))
     data_json = json.loads(tmp)

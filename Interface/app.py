@@ -26,6 +26,11 @@ st.set_page_config(
     # layout="wide",
     initial_sidebar_state="expanded")
 
+st.write('''
+<h3><img src={icone_link} style=height:1cm> HydrEAUviewer<h3>
+'''.format(icone_link=icone), unsafe_allow_html=True)
+# st.title("title")
+
 # --------------------------------- Sidebar  --------------------------------
 
 # Inputs #

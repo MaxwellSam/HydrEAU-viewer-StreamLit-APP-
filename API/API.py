@@ -96,4 +96,5 @@ def hydro_obs_tr():
 # Run API
 
 if __name__ == "__main__":
-    API.run(debug=True)
+    API.debug = True
+    API.run(host="0.0.0.0", port=5003)

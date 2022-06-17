@@ -6,7 +6,7 @@ Date: 02/2022
 """ 
 
 # route for API
-url_API = "http://127.0.0.1:5000/"
+url_API = "http://127.0.0.1:5003/"
 url_hydro = url_API+"hydro"
 url_hydro_stations = url_hydro+"/stations"
 url_hydro_obs_elab = url_hydro+"/obs_elab"
