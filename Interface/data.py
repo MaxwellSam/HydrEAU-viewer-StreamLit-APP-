@@ -15,7 +15,7 @@ import requests
 #                                        STATIONS                                                   #
 #####################################################################################################
 
-@st.cache
+@st.cache_data
 def fetch_data(url):
     """
     Description: request the API with the url and return the response as text format 

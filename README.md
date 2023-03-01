@@ -26,6 +26,41 @@ The program use some python modules. Please assure you to have installed on your
   - `Flask`
   - `Requests` 
 
+### Install requirements
+
+#### With virtualenv
+
+```
+virtualenv .venv
+source ./.venv/bin/activate
+pip3 install update pip
+pip3 install -r requirements
+```
+
+#### or with conda
+
+```
+ conda create --prefix ./venv python=3.8
+ conda activate ./.venv
+ pip3 install udate pip
+ pip3 install -r requirements
+```
+
+## Run the app
+
+### With run.sh
+
+```
+sh run.sh
+```
+
+### Or directly with python
+
+```
+python3 ./API/API.py
+python3 -m streamlit run ./Interface/app.py
+```
+
 ## Project Architecture
 
 ```
