@@ -33,17 +33,17 @@ The program use some python modules. Please assure you to have installed on your
 ```
 virtualenv .venv
 source ./.venv/bin/activate
-pip3 install update pip
+pip3 install --upgrade pip
 pip3 install -r requirements.txt
 ```
 
 #### or with conda
 
 ```
- conda create --prefix ./venv python=3.8
- conda activate ./.venv
- pip3 install udate pip
- pip3 install -r requirements.txt
+conda create --prefix ./venv python=3.8
+conda activate ./.venv
+pip3 install --upgrade pip
+pip3 install -r requirements.txt
 ```
 
 ## Run the app
